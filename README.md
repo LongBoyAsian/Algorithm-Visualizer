@@ -33,3 +33,4 @@ An interactive web application that animates how different data structures and s
 - [x] Quick Sort
 - [x] Heap Sort
 - [x] Binary Search Tree visualization (insertion, deletion, search)
+- [ ] Encoding Algorithms
