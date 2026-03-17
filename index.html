@@ -12,15 +12,37 @@
     </header>
     <main>
         <div class="controls">
-            <button id="generate-array">Generate New Array</button>
+            <div class="array-gen-controls">
+                <button id="generate-array">Generate New Array</button>
+                <button id="reset-btn">Reset Defaults</button>
+                <div class="size-control">
+                    <label for="size">Size:</label>
+                    <input type="range" id="size" name="size" min="10" max="150" value="50">
+                    <span id="size-value">50</span>
+                </div>
+            </div>
             <div class="algo-controls">
                 <label for="algorithm-select">Algorithm:</label>
                 <select id="algorithm-select"></select>
                 <button id="sort-btn">Sort</button>
+                <button id="pause-resume-btn" style="display: none;">Pause</button>
+                <button id="stop-btn" style="display: none;">Stop</button>
             </div>
             <div class="speed-control">
                 <label for="speed">Speed:</label>
                 <input type="range" id="speed" name="speed" min="1" max="100" value="50">
+                <span id="speed-value">50</span>
+            </div>
+        </div>
+        <div id="info-panel">
+            <div class="algo-info">
+                <h3>Algorithm Information</h3>
+                <p id="algo-description"></p>
+            </div>
+            <div class="stats">
+                <h3>Statistics</h3>
+                <p><strong>Time Complexity:</strong> <span id="time-complexity"></span></p>
+                <p><strong>Comparisons:</strong> <span id="iteration-counter">0</span></p>
             </div>
         </div>
         <div id="array-container"></div>
