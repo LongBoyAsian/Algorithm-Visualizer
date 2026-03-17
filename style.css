@@ -17,6 +17,18 @@ header {
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
+.visualizer-switch {
+    margin-top: 0.5rem;
+}
+
+.visualizer-switch select {
+    padding: 0.3rem 0.5rem;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
 main {
     width: 90%;
     max-width: 1200px;
@@ -32,6 +44,12 @@ main {
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     margin-bottom: 2rem;
+}
+
+.controls input[type="number"] {
+    padding: 0.5rem;
+    border-radius: 5px;
+    border: 1px solid #ccc;
 }
 
 .controls button {
@@ -138,6 +156,51 @@ main {
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
+.hidden {
+    display: none !important;
+}
+
+#tree-container {
+    position: relative;
+    width: 100%;
+    height: 500px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    overflow: auto;
+}
+
+.tree-node {
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    background-color: #8a8aff;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    border: 2px solid #4a4a8a;
+    transform: translate(-50%, -50%); /* Center the node on its coordinates */
+    transition: background-color 0.3s, border-color 0.3s;
+    z-index: 10;
+}
+
+#tree-container svg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+
+.tree-line {
+    stroke: #aaa;
+    stroke-width: 2;
+}
+
 .array-bar {
     /* Width will be set dynamically by JS */
     margin: 0 1px;
@@ -151,6 +214,10 @@ main {
 .swapping { background-color: #dc3545; /* Red */ }
 .sorted { background-color: #28a745; /* Green */ }
 .pivot { background-color: #6f42c1; /* Purple */ }
+
+/* BST Node States */
+.visiting { border-color: #ffc107; } /* Yellow border */
+.found { background-color: #28a745; } /* Green background */
 
 #info-panel {
     display: flex;

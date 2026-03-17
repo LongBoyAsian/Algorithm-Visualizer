@@ -9,44 +9,63 @@
 <body>
     <header>
         <h1>Algorithm Visualizer</h1>
+        <div class="visualizer-switch">
+            <label for="visualizer-select">Select Visualizer:</label>
+            <select id="visualizer-select">
+                <option value="sorting">Sorting Algorithms</option>
+                <option value="bst">Binary Search Tree</option>
+            </select>
+        </div>
     </header>
     <main>
-        <div id="status-announcer" class="sr-only" aria-live="polite" aria-atomic="true"></div>
-        <div class="controls">
-            <div class="array-gen-controls">
-                <button id="generate-array">Generate New Array</button>
-                <button id="reset-btn">Reset Defaults</button>
-                <div class="size-control">
-                    <label for="size">Size:</label>
-                    <input type="range" id="size" name="size" min="10" max="150" value="50" aria-valuetext="50 elements">
-                    <span id="size-value">50</span>
+        <div id="sorting-visualizer">
+            <div id="status-announcer" class="sr-only" aria-live="polite" aria-atomic="true"></div>
+            <div class="controls">
+                <div class="array-gen-controls">
+                    <button id="generate-array">Generate New Array</button>
+                    <button id="reset-btn">Reset Defaults</button>
+                    <div class="size-control">
+                        <label for="size">Size:</label>
+                        <input type="range" id="size" name="size" min="10" max="150" value="50" aria-valuetext="50 elements">
+                        <span id="size-value">50</span>
+                    </div>
+                </div>
+                <div class="algo-controls">
+                    <label for="algorithm-select">Algorithm:</label>
+                    <select id="algorithm-select"></select>
+                    <button id="sort-btn">Sort</button>
+                    <button id="pause-resume-btn" style="display: none;" aria-pressed="false">Pause</button>
+                    <button id="stop-btn" style="display: none;">Stop</button>
+                </div>
+                <div class="speed-control">
+                    <label for="speed">Speed:</label>
+                    <input type="range" id="speed" name="speed" min="1" max="100" value="50" aria-valuetext="Speed 50">
+                    <span id="speed-value">50</span>
                 </div>
             </div>
-            <div class="algo-controls">
-                <label for="algorithm-select">Algorithm:</label>
-                <select id="algorithm-select"></select>
-                <button id="sort-btn">Sort</button>
-                <button id="pause-resume-btn" style="display: none;" aria-pressed="false">Pause</button>
-                <button id="stop-btn" style="display: none;">Stop</button>
+            <div id="info-panel">
+                <div class="algo-info">
+                    <h3>Algorithm Information</h3>
+                    <p id="algo-description"></p>
+                </div>
+                <div class="stats">
+                    <h3>Statistics</h3>
+                    <p><strong>Time Complexity:</strong> <span id="time-complexity"></span></p>
+                    <p><strong>Comparisons:</strong> <span id="iteration-counter" aria-live="polite">0</span></p>
+                </div>
             </div>
-            <div class="speed-control">
-                <label for="speed">Speed:</label>
-                <input type="range" id="speed" name="speed" min="1" max="100" value="50" aria-valuetext="Speed 50">
-                <span id="speed-value">50</span>
-            </div>
+            <div id="array-container"></div>
         </div>
-        <div id="info-panel">
-            <div class="algo-info">
-                <h3>Algorithm Information</h3>
-                <p id="algo-description"></p>
+
+        <div id="bst-visualizer" class="hidden">
+            <div class="controls">
+                <input type="number" id="bst-input" placeholder="Enter a value">
+                <button id="bst-insert">Insert</button>
+                <button id="bst-search">Search</button>
+                <button id="bst-delete">Delete</button>
             </div>
-            <div class="stats">
-                <h3>Statistics</h3>
-                <p><strong>Time Complexity:</strong> <span id="time-complexity"></span></p>
-                <p><strong>Comparisons:</strong> <span id="iteration-counter" aria-live="polite">0</span></p>
-            </div>
+            <div id="tree-container"></div>
         </div>
-        <div id="array-container"></div>
     </main>
     <script src="script.js"></script>
 </body>

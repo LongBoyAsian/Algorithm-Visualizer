@@ -1,6 +1,6 @@
 # Algorithm-Visualizer
 
-An interactive web application that animates how different data structures and sorting algorithms work. This project aims to provide a clear, visual understanding of complex processes like QuickSort, MergeSort, and operations on data structures like Binary Search Trees.
+An interactive web application that animates how different data structures and sorting algorithms work. This project provides a clear, visual understanding of complex processes like QuickSort, MergeSort, and operations on data structures like Binary Search Trees.
 
 ## ✨ Features
 
@@ -8,6 +8,7 @@ An interactive web application that animates how different data structures and s
 - **Interactive Controls**: Generate new random data sets, control the animation speed, and select different algorithms to visualize.
 - **Color-Coded Steps**: Bars are color-coded to represent their state (e.g., comparing, swapping, sorted) for easier comprehension.
 - **Responsive Design**: The visualizer is designed to work on various screen sizes.
+- **Data Structure Mode**: Switch between sorting algorithms and a Binary Search Tree visualizer with insertion, deletion, and search functionality.
 
 ## 🚀 Tech Stack
 
@@ -31,4 +32,4 @@ An interactive web application that animates how different data structures and s
 - [x] Merge Sort
 - [x] Quick Sort
 - [x] Heap Sort
-- [ ] Binary Search Tree visualization (insertion, deletion, search)
+- [x] Binary Search Tree visualization (insertion, deletion, search)
