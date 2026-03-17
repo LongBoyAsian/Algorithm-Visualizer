@@ -150,6 +150,7 @@ main {
 .comparing { background-color: #ffc107; /* Yellow */ }
 .swapping { background-color: #dc3545; /* Red */ }
 .sorted { background-color: #28a745; /* Green */ }
+.pivot { background-color: #6f42c1; /* Purple */ }
 
 #info-panel {
     display: flex;

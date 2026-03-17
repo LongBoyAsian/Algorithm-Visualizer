@@ -34,8 +34,21 @@ const algorithms = {
         description: "Bubble Sort is a simple sorting algorithm that repeatedly steps through the list, compares adjacent elements and swaps them if they are in the wrong order. The pass through the list is repeated until the list is sorted.",
         complexity: "O(n²)"
     },
-    // When you add Quick Sort, you'll just add a line here:
-    // "Quick Sort": { func: quickSort, description: "...", complexity: "O(n log n)" }, 
+    "Quick Sort": {
+        func: quickSort,
+        description: "Quick Sort is an efficient, divide-and-conquer sorting algorithm. It works by selecting a 'pivot' element and partitioning the other elements into two sub-arrays, according to whether they are less than or greater than the pivot.",
+        complexity: "O(n log n)"
+    },
+    "Merge Sort": {
+        func: mergeSort,
+        description: "Merge Sort is an efficient, stable, divide-and-conquer sorting algorithm. It works by recursively dividing the unsorted list into n sub-lists, each containing one element, and then repeatedly merging sub-lists to produce new sorted sub-lists until there is only one sub-list remaining.",
+        complexity: "O(n log n)"
+    },
+    "Heap Sort": {
+        func: heapSort,
+        description: "Heap Sort is a comparison-based sorting algorithm that uses a binary heap data structure. It first builds a max-heap from the input data, then repeatedly extracts the maximum element from the heap and moves it to the sorted portion of the array.",
+        complexity: "O(n log n)"
+    }
 };
 
 // --- Core Logic ---
@@ -168,6 +181,206 @@ async function bubbleSort() {
         bars[0].classList.add('sorted');
     }
 
+}
+
+// Quick Sort Algorithm Visualization
+async function quickSort() {
+    const bars = document.getElementsByClassName('array-bar');
+    await quickSortRecursive(bars, 0, array.length - 1);
+
+    // Final sweep to mark all as sorted
+    for (let i = 0; i < bars.length; i++) {
+        await pausableSleep(10);
+        bars[i].classList.remove('comparing', 'pivot');
+        bars[i].classList.add('sorted');
+    }
+}
+
+async function quickSortRecursive(bars, low, high) {
+    if (low < high) {
+        let pivotIndex = await partition(bars, low, high);
+        await quickSortRecursive(bars, low, pivotIndex - 1);
+        await quickSortRecursive(bars, pivotIndex + 1, high);
+    }
+}
+
+async function partition(bars, low, high) {
+    let pivot = array[high];
+    bars[high].classList.add('pivot');
+
+    let i = low - 1;
+
+    for (let j = low; j < high; j++) {
+        bars[j].classList.add('comparing');
+        comparisonCount++;
+        iterationCounter.innerText = comparisonCount;
+        await pausableSleep(animationSpeed);
+
+        if (array[j] < pivot) {
+            i++;
+            bars[i].classList.add('swapping');
+            bars[j].classList.add('swapping');
+            await pausableSleep(animationSpeed);
+
+            [array[i], array[j]] = [array[j], array[i]];
+            swapBars(bars[i], bars[j]);
+            await pausableSleep(animationSpeed);
+            bars[i].classList.remove('swapping');
+            bars[j].classList.remove('swapping');
+        }
+        bars[j].classList.remove('comparing');
+    }
+
+    bars[i + 1].classList.add('swapping');
+    bars[high].classList.add('swapping');
+    await pausableSleep(animationSpeed);
+
+    [array[i + 1], array[high]] = [array[high], array[i + 1]];
+    swapBars(bars[i + 1], bars[high]);
+    await pausableSleep(animationSpeed);
+
+    bars[high].classList.remove('pivot');
+    bars[i + 1].classList.remove('swapping');
+    bars[high].classList.remove('swapping');
+
+    return i + 1;
+}
+
+// Merge Sort Algorithm Visualization
+async function mergeSort() {
+    const bars = document.getElementsByClassName('array-bar');
+    await mergeSortRecursive(bars, 0, array.length - 1);
+
+    // Final sweep to mark all as sorted
+    for (let i = 0; i < bars.length; i++) {
+        await pausableSleep(10);
+        bars[i].classList.add('sorted');
+    }
+}
+
+async function mergeSortRecursive(bars, left, right) {
+    if (left >= right) {
+        return;
+    }
+    const mid = Math.floor((left + right) / 2);
+    await mergeSortRecursive(bars, left, mid);
+    await mergeSortRecursive(bars, mid + 1, right);
+    await merge(bars, left, mid, right);
+}
+
+async function merge(bars, left, mid, right) {
+    let n1 = mid - left + 1;
+    let n2 = right - mid;
+
+    let leftArray = new Array(n1);
+    let rightArray = new Array(n2);
+
+    for (let i = 0; i < n1; i++) leftArray[i] = array[left + i];
+    for (let j = 0; j < n2; j++) rightArray[j] = array[mid + 1 + j];
+
+    let i = 0, j = 0, k = left;
+
+    while (i < n1 && j < n2) {
+        comparisonCount++;
+        iterationCounter.innerText = comparisonCount;
+        bars[k].classList.add('comparing');
+        await pausableSleep(animationSpeed);
+
+        if (leftArray[i] <= rightArray[j]) {
+            array[k] = leftArray[i];
+            bars[k].style.height = `${leftArray[i] * 4}px`;
+            i++;
+        } else {
+            array[k] = rightArray[j];
+            bars[k].style.height = `${rightArray[j] * 4}px`;
+            j++;
+        }
+        bars[k].classList.remove('comparing');
+        k++;
+    }
+
+    while (i < n1) array[k++] = leftArray[i++];
+    while (j < n2) array[k++] = rightArray[j++];
+
+    // Visually update the remaining bars that were copied without comparison
+    for (let idx = left; idx <= right; idx++) {
+        bars[idx].style.height = `${array[idx] * 4}px`;
+    }
+}
+
+// Heap Sort Algorithm Visualization
+async function heapSort() {
+    const bars = document.getElementsByClassName('array-bar');
+    const n = array.length;
+
+    // Build max heap (rearrange array)
+    for (let i = Math.floor(n / 2) - 1; i >= 0; i--) {
+        await heapify(bars, n, i);
+    }
+
+    // One by one extract an element from heap
+    for (let i = n - 1; i > 0; i--) {
+        // Move current root to end
+        bars[0].classList.add('swapping');
+        bars[i].classList.add('swapping');
+        await pausableSleep(animationSpeed);
+
+        [array[0], array[i]] = [array[i], array[0]];
+        swapBars(bars[0], bars[i]);
+        
+        await pausableSleep(animationSpeed);
+        bars[0].classList.remove('swapping');
+        bars[i].classList.remove('swapping');
+        bars[i].classList.add('sorted');
+
+        // call max heapify on the reduced heap
+        await heapify(bars, i, 0);
+    }
+
+    if (n > 0) {
+        bars[0].classList.add('sorted');
+    }
+}
+
+async function heapify(bars, n, i) {
+    let largest = i; // Initialize largest as root
+    let left = 2 * i + 1;
+    let right = 2 * i + 2;
+
+    bars[i].classList.add('pivot'); // Use pivot color to show the root of the subtree
+
+    // If left child is larger than root
+    if (left < n) {
+        bars[left].classList.add('comparing');
+        await pausableSleep(animationSpeed);
+        comparisonCount++;
+        iterationCounter.innerText = comparisonCount;
+        if (array[left] > array[largest]) {
+            largest = left;
+        }
+        bars[left].classList.remove('comparing');
+    }
+
+    // If right child is larger than largest so far
+    if (right < n) {
+        bars[right].classList.add('comparing');
+        await pausableSleep(animationSpeed);
+        comparisonCount++;
+        iterationCounter.innerText = comparisonCount;
+        if (array[right] > array[largest]) {
+            largest = right;
+        }
+        bars[right].classList.remove('comparing');
+    }
+
+    // If largest is not root
+    if (largest !== i) {
+        [array[i], array[largest]] = [array[largest], array[i]];
+        swapBars(bars[i], bars[largest]);
+        await pausableSleep(animationSpeed);
+        await heapify(bars, n, largest);
+    }
+    bars[i].classList.remove('pivot');
 }
 
 // --- UI and Event Listeners ---

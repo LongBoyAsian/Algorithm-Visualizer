@@ -28,7 +28,7 @@ An interactive web application that animates how different data structures and s
 
 ## 🔮 Future Implementations
 
-- [ ] Merge Sort
-- [ ] Quick Sort
-- [ ] Heap Sort
+- [x] Merge Sort
+- [x] Quick Sort
+- [x] Heap Sort
 - [ ] Binary Search Tree visualization (insertion, deletion, search)
