@@ -176,3 +176,45 @@ main {
 #info-panel p {
     line-height: 1.5;
 }
+
+/* --- Responsive Design --- */
+@media (max-width: 820px) {
+    main {
+        width: 95%;
+        margin-top: 1rem;
+    }
+
+    .controls {
+        flex-direction: column;
+        gap: 1.5rem;
+        align-items: stretch;
+    }
+
+    .array-gen-controls,
+    .algo-controls,
+    .speed-control {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    #info-panel {
+        flex-direction: column;
+    }
+
+    #array-container {
+        height: 300px;
+    }
+}
+
+/* For screen-reader accessibility */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+}

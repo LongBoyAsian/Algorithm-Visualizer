@@ -10,6 +10,7 @@ const sizeSlider = document.getElementById('size');
 const sizeValueLabel = document.getElementById('size-value');
 const speedValueLabel = document.getElementById('speed-value');
 const algoDescription = document.getElementById('algo-description');
+const statusAnnouncer = document.getElementById('status-announcer');
 const timeComplexity = document.getElementById('time-complexity');
 const iterationCounter = document.getElementById('iteration-counter');
 
@@ -186,6 +187,10 @@ function updateInfoPanel() {
     const selectedAlgorithmName = algorithmSelect.value;
     const algoData = algorithms[selectedAlgorithmName];
     if (algoData) {
+        // Announce the change for screen readers if the panel is not focused
+        if (document.activeElement !== algorithmSelect) {
+            statusAnnouncer.textContent = `Selected ${selectedAlgorithmName}. Complexity: ${algoData.complexity}.`;
+        }
         algoDescription.innerText = algoData.description;
         timeComplexity.innerText = algoData.complexity;
     }
@@ -196,8 +201,9 @@ async function startSort() {
     comparisonCount = 0;
     iterationCounter.innerText = comparisonCount;
     
-    disableControls();
     const selectedAlgorithmName = algorithmSelect.value;
+    disableControls();
+    statusAnnouncer.textContent = `Sort started using ${selectedAlgorithmName}.`;
 
     if (algorithms[selectedAlgorithmName]) {
         try {
@@ -208,10 +214,15 @@ async function startSort() {
             }
             // If the error is our specific "SortStopped" signal, we handle it.
             console.log("Sort stopped by user.");
+            statusAnnouncer.textContent = 'Sort stopped by user.';
             resetAllBarColors(); // Clean up partial coloring
         } finally {
             // This block runs whether the sort finished or was stopped
             enableControls();
+            // Announce completion only if it wasn't stopped
+            if (!stopSignal) {
+                statusAnnouncer.textContent = `Sort complete. Total comparisons: ${comparisonCount}.`;
+            }
         }
     }
 }
@@ -222,6 +233,7 @@ resetBtn.addEventListener('click', resetToDefaults);
 pauseResumeBtn.addEventListener('click', () => {
     isPaused = !isPaused;
     pauseResumeBtn.innerText = isPaused ? 'Resume' : 'Pause';
+    pauseResumeBtn.setAttribute('aria-pressed', isPaused);
 });
 stopBtn.addEventListener('click', () => {
     stopSignal = true;
@@ -237,11 +249,15 @@ algorithmSelect.addEventListener('change', updateInfoPanel);
  * @param {HTMLInputElement} config.slider The slider element.
  * @param {HTMLElement} config.label The element to display the value in.
  * @param {function(string): void} config.onUpdate A callback function to run on update.
+ * @param {(function(string): string)|undefined} config.formatValueText A function to format the aria-valuetext.
  */
-function setupSlider({ slider, label, onUpdate }) {
+function setupSlider({ slider, label, onUpdate, formatValueText }) {
     slider.addEventListener('input', (e) => {
         const value = e.target.value;
         label.innerText = value;
+        if (formatValueText) {
+            slider.setAttribute('aria-valuetext', formatValueText(value));
+        }
         onUpdate(value);
     });
 }
@@ -254,14 +270,17 @@ window.onload = () => {
     setupSlider({
         slider: sizeSlider,
         label: sizeValueLabel,
+        formatValueText: (value) => `${value} elements`,
         onUpdate: (value) => {
             arraySize = parseInt(value);
             generateArray();
         }
     });
+
     setupSlider({
         slider: speedSlider,
         label: speedValueLabel,
+        formatValueText: (value) => `Speed ${value}`,
         onUpdate: (value) => {
             animationSpeed = 101 - parseInt(value);
         }
@@ -270,3 +289,29 @@ window.onload = () => {
     // Set the initial state of the application to the defaults
     resetToDefaults();
 };
+
+// Resets all controls and the array to their default initial state
+function resetToDefaults() {
+    // Set slider and select values
+    sizeSlider.value = DEFAULTS.SIZE;
+    speedSlider.value = DEFAULTS.SPEED;
+    algorithmSelect.selectedIndex = DEFAULTS.ALGO_INDEX;
+
+    // Update labels
+    sizeValueLabel.innerText = DEFAULTS.SIZE;
+    speedValueLabel.innerText = DEFAULTS.SPEED;
+
+    // Update ARIA values
+    sizeSlider.setAttribute('aria-valuetext', `${DEFAULTS.SIZE} elements`);
+    speedSlider.setAttribute('aria-valuetext', `Speed ${DEFAULTS.SPEED}`);
+
+    // Update global state
+    arraySize = DEFAULTS.SIZE;
+    animationSpeed = 101 - DEFAULTS.SPEED;
+
+    // Update info panel
+    updateInfoPanel();
+
+    // Generate a new array with the default settings
+    generateArray();
+}
