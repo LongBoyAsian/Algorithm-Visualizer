@@ -7,8 +7,10 @@ const sortingVisualizer = document.getElementById('sorting-visualizer');
 const bstVisualizer = document.getElementById('bst-visualizer');
 const bstInput = document.getElementById('bst-input');
 const bstInsertBtn = document.getElementById('bst-insert');
+const bstGenerateBtn = document.getElementById('bst-generate');
 const bstSearchBtn = document.getElementById('bst-search');
 const bstDeleteBtn = document.getElementById('bst-delete');
+const bstClearBtn = document.getElementById('bst-clear');
 const treeContainer = document.getElementById('tree-container');
 const algorithmSelect = document.getElementById('algorithm-select');
 const pauseResumeBtn = document.getElementById('pause-resume-btn');
@@ -61,11 +63,14 @@ async function pausableSleep(ms) {
 
 // --- UI and Event Listeners ---
 
-visualizerSelect.addEventListener('change', (e) => {
-    if (e.target.value === 'sorting') {
+function switchVisualizer(visualizerType) {
+    // Update the dropdown to reflect the current view
+    visualizerSelect.value = visualizerType;
+
+    if (visualizerType === 'sorting') {
         sortingVisualizer.classList.remove('hidden');
         bstVisualizer.classList.add('hidden');
-    } else {
+    } else { // 'bst'
         sortingVisualizer.classList.add('hidden');
         bstVisualizer.classList.remove('hidden');
         if (bst === null) {
@@ -73,10 +78,19 @@ visualizerSelect.addEventListener('change', (e) => {
             initBstVisualizer();
         }
     }
+}
+
+visualizerSelect.addEventListener('change', (e) => {
+    const selectedVisualizer = e.target.value;
+    localStorage.setItem('selectedVisualizer', selectedVisualizer);
+    switchVisualizer(selectedVisualizer);
 });
 
 // Initial setup when the page loads
 window.onload = () => {
-    // Initialize the default visualizer (Sorting)
+    // Always initialize the sorting visualizer as it's the default and its controls are part of the main UI
     initSortingVisualizer();
+
+    const savedVisualizer = localStorage.getItem('selectedVisualizer');
+    switchVisualizer(savedVisualizer || 'sorting');
 };

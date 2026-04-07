@@ -59,10 +59,16 @@
 
         <div id="bst-visualizer" class="hidden">
             <div class="controls">
-                <input type="number" id="bst-input" placeholder="Enter a value">
-                <button id="bst-insert">Insert</button>
-                <button id="bst-search">Search</button>
-                <button id="bst-delete">Delete</button>
+                <div class="bst-management-controls">
+                    <button id="bst-generate">Generate Random Tree</button>
+                    <button id="bst-clear">Clear Tree</button>
+                </div>
+                <div class="bst-node-controls">
+                    <input type="number" id="bst-input" placeholder="Enter a value">
+                    <button id="bst-insert">Insert</button>
+                    <button id="bst-search">Search</button>
+                    <button id="bst-delete">Delete</button>
+                </div>
             </div>
             <div id="tree-container"></div>
         </div>

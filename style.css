@@ -71,6 +71,15 @@ main {
     cursor: not-allowed;
 }
 
+#bst-generate {
+    background-color: #17a2b8; /* Info blue/teal */
+    margin-right: 1rem; /* Add some space between it and the next button */
+}
+
+#bst-generate:hover {
+    background-color: #138496;
+}
+
 #pause-resume-btn {
     background-color: #ffc107; /* Yellow */
     color: #212529;
@@ -143,6 +152,13 @@ main {
     min-width: 30px; /* Prevents layout shift when number of digits changes */
     text-align: left;
     margin-left: 0.5rem;
+}
+
+.bst-management-controls, .bst-node-controls {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap; /* Allow wrapping on smaller screens */
 }
 
 #array-container {

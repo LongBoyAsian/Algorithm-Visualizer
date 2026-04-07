@@ -1,6 +1,6 @@
 // This file assumes the following globals are defined in script.js:
-// bst, treeContainer, animationSpeed, pausableSleep, statusAnnouncer,
-// bstInput, bstInsertBtn, bstSearchBtn, bstDeleteBtn
+// bst, treeContainer, animationSpeed, pausableSleep, statusAnnouncer, bstInput,
+// bstInsertBtn, bstGenerateBtn, bstSearchBtn, bstDeleteBtn, bstClearBtn
 
 const NODE_DIAMETER = 40;
 const HORIZONTAL_SPACING = 50;
@@ -29,6 +29,7 @@ class BinarySearchTree {
 
     async insert(value) {
         if (this.isAnimating) return;
+        this.clearHighlights();
         this.isAnimating = true;
         value = parseInt(value);
         if (isNaN(value)) {
@@ -79,6 +80,7 @@ class BinarySearchTree {
 
     async search(value) {
         if (this.isAnimating) return;
+        this.clearHighlights();
         this.isAnimating = true;
         value = parseInt(value);
         if (isNaN(value)) {
@@ -87,20 +89,32 @@ class BinarySearchTree {
             return;
         }
 
+        if (!this.root) {
+            statusAnnouncer.textContent = "Cannot search in an empty tree.";
+            this.isAnimating = false;
+            return null;
+        }
+
         let current = this.root;
         while (current !== null) {
+            if (!current.element) {
+                console.error("Search failed: node is missing its DOM element.", current);
+                statusAnnouncer.textContent = "An error occurred during search.";
+                this.isAnimating = false;
+                return null;
+            }
             current.element.classList.add('visiting');
             await pausableSleep(animationSpeed * 5);
 
             if (value === current.value) {
                 current.element.classList.remove('visiting');
                 current.element.classList.add('found');
+                statusAnnouncer.textContent = `Value ${value} found.`;
                 await pausableSleep(animationSpeed * 10);
-                current.element.classList.remove('found');
+                // The 'found' class is now intentionally left on the node for clarity.
                 this.isAnimating = false;
                 return current;
             }
-            current.element.classList.remove('visiting');
             current = value < current.value ? current.left : current.right;
         }
         // Not found
@@ -111,6 +125,7 @@ class BinarySearchTree {
 
     async delete(value) {
         if (this.isAnimating) return;
+        this.clearHighlights();
         this.isAnimating = true;
         value = parseInt(value);
         if (isNaN(value)) {
@@ -165,6 +180,85 @@ class BinarySearchTree {
             
             successor.element.classList.remove('found');
             return node;
+        }
+    }
+
+    clear() {
+        if (this.isAnimating) {
+            statusAnnouncer.textContent = "Cannot clear tree while an operation is in progress.";
+            return;
+        }
+        this.root = null;
+        this.nodeIdCounter = 0;
+        treeContainer.innerHTML = '';
+        statusAnnouncer.textContent = "Tree has been cleared.";
+        // Also clear the input field for good measure
+        bstInput.value = '';
+    }
+
+    async generateRandomTree(count = 10) {
+        if (this.isAnimating) {
+            statusAnnouncer.textContent = "Cannot generate while an operation is in progress.";
+            return;
+        }
+        this.isAnimating = true;
+
+        this.clear();
+        await pausableSleep(10); // Give UI a moment to update from clear()
+
+        statusAnnouncer.textContent = "Generating a random tree...";
+
+        const values = new Set();
+        while (values.size < count) {
+            values.add(Math.floor(Math.random() * 99) + 1);
+        }
+
+        // Internal, non-animated, recursive insert logic
+        const insertValue = (value, node) => {
+            if (value < node.value) {
+                if (node.left === null) {
+                    node.left = new TreeNode(value, this.nodeIdCounter++, node.depth + 1);
+                } else {
+                    insertValue(value, node.left);
+                }
+            } else if (value > node.value) {
+                if (node.right === null) {
+                    node.right = new TreeNode(value, this.nodeIdCounter++, node.depth + 1);
+                } else {
+                    insertValue(value, node.right);
+                }
+            }
+        };
+
+        // Shuffle values to get a more balanced tree on average
+        const shuffledValues = Array.from(values).sort(() => Math.random() - 0.5);
+
+        for (const value of shuffledValues) {
+            if (this.root === null) {
+                this.root = new TreeNode(value, this.nodeIdCounter++);
+            } else {
+                insertValue(value, this.root);
+            }
+        }
+
+        await this.drawTree();
+        statusAnnouncer.textContent = "Random tree generated. You can now search or delete nodes.";
+        this.isAnimating = false;
+    }
+
+    /**
+     * Traverses the tree and removes 'visiting' and 'found' CSS classes from all nodes.
+     */
+    clearHighlights() {
+        if (!this.root) return;
+        const queue = [this.root];
+        while (queue.length > 0) {
+            const node = queue.shift();
+            if (node && node.element) {
+                node.element.classList.remove('visiting', 'found');
+            }
+            if (node.left) queue.push(node.left);
+            if (node.right) queue.push(node.right);
         }
     }
 
@@ -249,6 +343,12 @@ class BinarySearchTree {
 function initBstVisualizer() {
     bst = new BinarySearchTree();
 
+    bstGenerateBtn.addEventListener('click', () => {
+        if (bst) {
+            bst.generateRandomTree();
+        }
+    });
+
     bstInsertBtn.addEventListener('click', () => {
         if (bst && bstInput.value) {
             bst.insert(bstInput.value);
@@ -267,6 +367,12 @@ function initBstVisualizer() {
         if (bst && bstInput.value) {
             bst.delete(bstInput.value);
             bstInput.value = '';
+        }
+    });
+
+    bstClearBtn.addEventListener('click', () => {
+        if (bst) {
+            bst.clear();
         }
     });
 }

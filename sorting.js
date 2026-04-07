@@ -8,22 +8,22 @@
 const algorithms = {
     "Bubble Sort": {
         func: bubbleSort,
-        description: "Bubble Sort is a simple sorting algorithm that repeatedly steps through the list, compares adjacent elements and swaps them if they are in the wrong order. The pass through the list is repeated until the list is sorted.",
+        description: "Bubble Sort is a simple sorting algorithm that repeatedly steps through the list, compares adjacent elements and swaps them if they are in the wrong order. The pass through the list is repeated until the list is sorted.\n\nWhen to use: Best for small or nearly-sorted datasets where simplicity is more important than speed.\n\nWhy: It's easy to understand and implement, but its O(n²) complexity makes it very slow for large, random lists.",
         complexity: "O(n²)"
     },
     "Quick Sort": {
         func: quickSort,
-        description: "Quick Sort is an efficient, divide-and-conquer sorting algorithm. It works by selecting a 'pivot' element and partitioning the other elements into two sub-arrays, according to whether they are less than or greater than the pivot.",
+        description: "Quick Sort is an efficient, divide-and-conquer sorting algorithm. It works by selecting a 'pivot' element and partitioning the other elements into two sub-arrays, according to whether they are less than or greater than the pivot.\n\nWhen to use: Excellent for large, unsorted datasets where performance is critical.\n\nWhy: It has a very fast average-case performance of O(n log n). However, it's not a stable sort, and its worst-case performance is O(n²), though this is rare with good pivot selection.",
         complexity: "O(n log n)"
     },
     "Merge Sort": {
         func: mergeSort,
-        description: "Merge Sort is an efficient, stable, divide-and-conquer sorting algorithm. It works by recursively dividing the unsorted list into n sub-lists, each containing one element, and then repeatedly merging sub-lists to produce new sorted sub-lists until there is only one sub-list remaining.",
+        description: "Merge Sort is an efficient, stable, divide-and-conquer sorting algorithm. It works by recursively dividing the unsorted list into n sub-lists, each containing one element, and then repeatedly merging sub-lists to produce new sorted sub-lists until there is only one sub-list remaining.\n\nWhen to use: Ideal for situations where data stability (preserving the order of equal elements) is required, or for sorting large datasets that may not fit into memory (external sorting).\n\nWhy: It guarantees O(n log n) performance in all cases and is stable. Its main drawback is that it requires extra memory (O(n)).",
         complexity: "O(n log n)"
     },
     "Heap Sort": {
         func: heapSort,
-        description: "Heap Sort is a comparison-based sorting algorithm that uses a binary heap data structure. It first builds a max-heap from the input data, then repeatedly extracts the maximum element from the heap and moves it to the sorted portion of the array.",
+        description: "Heap Sort is a comparison-based sorting algorithm that uses a binary heap data structure. It first builds a max-heap from the input data, then repeatedly extracts the maximum element from the heap and moves it to the sorted portion of the array.\n\nWhen to use: A great choice when you need guaranteed O(n log n) performance but cannot afford the extra memory usage of Merge Sort.\n\nWhy: It provides consistent O(n log n) time complexity and sorts in-place (O(1) extra space). It is not a stable sort.",
         complexity: "O(n log n)"
     }
 };
