@@ -2,6 +2,9 @@
 
 An interactive web application that animates how different data structures and sorting algorithms work. This project provides a clear, visual understanding of complex processes like QuickSort, MergeSort, and operations on data structures like Binary Search Trees.
 
+## 🌐 Live Demo
+Experience the visualizer immediately without downloading any code: [**\[algorithm-visualizer.vercel.app\](https://algorithm-visualizer.vercel.app)**](https://algorithm-visualizer-bay-seven.vercel.app/)
+
 ## ✨ Features
 
 - **Visualize Sorting Algorithms**: Watch algorithms like Bubble Sort, Merge Sort, Quick Sort, and more in action.
