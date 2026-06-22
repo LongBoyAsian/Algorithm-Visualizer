@@ -1,6 +1,7 @@
 // This file assumes the following globals are defined in script.js:
-// bst, treeContainer, animationSpeed, pausableSleep, statusAnnouncer, bstInput,
 // bstInsertBtn, bstGenerateBtn, bstSearchBtn, bstDeleteBtn, bstClearBtn
+
+let bstAnimationSpeed = 50;
 
 const NODE_DIAMETER = 40;
 const HORIZONTAL_SPACING = 50;
@@ -48,7 +49,7 @@ class BinarySearchTree {
         let current = this.root;
         while (true) {
             current.element.classList.add('visiting');
-            await pausableSleep(animationSpeed * 5);
+            await pausableSleep(bstAnimationSpeed * 5);
 
             if (value < current.value) {
                 current.element.classList.remove('visiting');
@@ -70,7 +71,7 @@ class BinarySearchTree {
                 // Value already exists
                 current.element.classList.remove('visiting');
                 current.element.classList.add('found');
-                await pausableSleep(animationSpeed * 10);
+                await pausableSleep(bstAnimationSpeed * 10);
                 current.element.classList.remove('found');
                 break;
             }
@@ -104,13 +105,13 @@ class BinarySearchTree {
                 return null;
             }
             current.element.classList.add('visiting');
-            await pausableSleep(animationSpeed * 5);
+            await pausableSleep(bstAnimationSpeed * 5);
 
             if (value === current.value) {
                 current.element.classList.remove('visiting');
                 current.element.classList.add('found');
                 statusAnnouncer.textContent = `Value ${value} found.`;
-                await pausableSleep(animationSpeed * 10);
+                await pausableSleep(bstAnimationSpeed * 10);
                 // The 'found' class is now intentionally left on the node for clarity.
                 this.isAnimating = false;
                 return current;
@@ -146,7 +147,7 @@ class BinarySearchTree {
         }
 
         node.element.classList.add('visiting');
-        await pausableSleep(animationSpeed * 5);
+        await pausableSleep(bstAnimationSpeed * 5);
         node.element.classList.remove('visiting');
 
         if (value < node.value) {
@@ -158,7 +159,7 @@ class BinarySearchTree {
         } else {
             // Node to be deleted found
             node.element.classList.add('found');
-            await pausableSleep(animationSpeed * 5);
+            await pausableSleep(bstAnimationSpeed * 5);
 
             // Case 1: No child or one child
             if (node.left === null) return node.right;
@@ -168,12 +169,12 @@ class BinarySearchTree {
             let successor = node.right;
             while (successor.left !== null) {
                 successor.element.classList.add('visiting');
-                await pausableSleep(animationSpeed * 5);
+                await pausableSleep(bstAnimationSpeed * 5);
                 successor.element.classList.remove('visiting');
                 successor = successor.left;
             }
             successor.element.classList.add('found');
-            await pausableSleep(animationSpeed * 5);
+            await pausableSleep(bstAnimationSpeed * 5);
 
             node.value = successor.value; // Copy successor's value to this node
             node.right = await this.deleteNode(node.right, successor.value); // Delete the successor
@@ -342,6 +343,27 @@ class BinarySearchTree {
 
 function initBstVisualizer() {
     bst = new BinarySearchTree();
+
+    const bstSpeedSlider = document.getElementById('bst-speed');
+    const bstSpeedValue = document.getElementById('bst-speed-value');
+
+    if (bstSpeedSlider) {
+        const savedBstSpeed = localStorage.getItem('bstSpeed');
+        if (savedBstSpeed) {
+            bstSpeedSlider.value = savedBstSpeed;
+            bstSpeedValue.textContent = savedBstSpeed;
+            bstAnimationSpeed = 101 - parseInt(savedBstSpeed);
+        } else {
+            bstAnimationSpeed = 101 - parseInt(bstSpeedSlider.value);
+        }
+
+        bstSpeedSlider.addEventListener('input', (e) => {
+            const val = parseInt(e.target.value);
+            bstAnimationSpeed = 101 - val;
+            bstSpeedValue.textContent = val;
+            localStorage.setItem('bstSpeed', val);
+        });
+    }
 
     bstGenerateBtn.addEventListener('click', () => {
         if (bst) {

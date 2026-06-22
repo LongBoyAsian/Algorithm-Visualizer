@@ -68,11 +68,14 @@
                     <button id="bst-generate">Generate Random Tree</button>
                     <button id="bst-clear">Clear Tree</button>
                 </div>
-                <div class="bst-node-controls">
-                    <input type="number" id="bst-input" placeholder="Enter a value">
+                <div class="bst-node-controls" style="display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
+                    <input type="number" id="bst-input" placeholder="Enter a value" style="width: 120px;">
                     <button id="bst-insert">Insert</button>
                     <button id="bst-search">Search</button>
                     <button id="bst-delete">Delete</button>
+                    <label for="bst-speed" style="font-weight: bold; color: #4a4a8a; margin-left: 1rem;">Speed:</label>
+                    <input type="range" id="bst-speed" min="1" max="100" value="50" style="width: 100px;">
+                    <span id="bst-speed-value" style="min-width: 2em;">50</span>
                 </div>
             </div>
             <div id="tree-container"></div>
