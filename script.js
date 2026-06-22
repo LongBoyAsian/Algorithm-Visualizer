@@ -5,6 +5,7 @@ const sortBtn = document.getElementById('sort-btn');
 const visualizerSelect = document.getElementById('visualizer-select');
 const sortingVisualizer = document.getElementById('sorting-visualizer');
 const bstVisualizer = document.getElementById('bst-visualizer');
+const huffmanVisualizer = document.getElementById('huffman-visualizer');
 const bstInput = document.getElementById('bst-input');
 const bstInsertBtn = document.getElementById('bst-insert');
 const bstGenerateBtn = document.getElementById('bst-generate');
@@ -33,6 +34,7 @@ let comparisonCount = 0;
 let isPaused = false;
 let stopSignal = false;
 let bst = null; // To hold the BinarySearchTree instance
+let huffmanTree = null; // To hold the HuffmanTree instance
 
 // --- Constants ---
 const DEFAULTS = {
@@ -67,15 +69,22 @@ function switchVisualizer(visualizerType) {
     // Update the dropdown to reflect the current view
     visualizerSelect.value = visualizerType;
 
+    sortingVisualizer.classList.add('hidden');
+    bstVisualizer.classList.add('hidden');
+    huffmanVisualizer.classList.add('hidden');
+
     if (visualizerType === 'sorting') {
         sortingVisualizer.classList.remove('hidden');
-        bstVisualizer.classList.add('hidden');
-    } else { // 'bst'
-        sortingVisualizer.classList.add('hidden');
+    } else if (visualizerType === 'bst') {
         bstVisualizer.classList.remove('hidden');
         if (bst === null) {
             // The BST is initialized only when first switched to.
             initBstVisualizer();
+        }
+    } else if (visualizerType === 'huffman') {
+        huffmanVisualizer.classList.remove('hidden');
+        if (huffmanTree === null && typeof initHuffmanVisualizer === 'function') {
+            initHuffmanVisualizer();
         }
     }
 }

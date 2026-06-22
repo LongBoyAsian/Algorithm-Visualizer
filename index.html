@@ -18,6 +18,7 @@
             <select id="visualizer-select">
                 <option value="sorting">Sorting Algorithms</option>
                 <option value="bst">Binary Search Tree</option>
+                <option value="huffman">Huffman Encoding / Decoding</option>
             </select>
         </div>
     </header>
@@ -76,9 +77,79 @@
             </div>
             <div id="tree-container"></div>
         </div>
+        <div id="huffman-visualizer" class="hidden">
+            <div class="controls" style="margin-bottom: 1rem;">
+                <div class="huffman-controls" style="display: flex; gap: 1rem; align-items: center; width: 100%; flex-wrap: wrap;">
+                    <label for="huffman-input">Input Text:</label>
+                    <input type="text" id="huffman-input" value="algorithm visualizer" placeholder="Enter text to encode" style="flex: 1; min-width: 200px;">
+                    <div style="display: flex; gap: 1rem; align-items: center;">
+                        <label for="huffman-speed" style="font-weight: bold; color: #4a4a8a;">Speed:</label>
+                        <input type="range" id="huffman-speed" min="1" max="100" value="50" style="width: 150px;">
+                        <span id="huffman-speed-value" style="min-width: 2em;">50</span>
+                        <button id="huffman-generate">Generate Huffman Tree</button>
+                        <button id="huffman-clear-btn" style="background-color: #dc3545; padding: 0.5rem 1rem; border: none; border-radius: 5px; color: white; cursor: pointer;">Clear</button>
+                    </div>
+                </div>
+            </div>
+            <div id="huffman-info-panel" style="background-color: #fff; padding: 1rem; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); margin-bottom: 1rem; line-height: 1.5;">
+                <h3 style="margin-top: 0; margin-bottom: 0.5rem; color: #4a4a8a;">What is Huffman Encoding?</h3>
+                <p style="margin-top: 0; margin-bottom: 0.5rem;"><strong>Definition:</strong> A popular greedy algorithm for lossless data compression. It assigns variable-length binary codes to characters based on their frequencies in the data. The most frequent characters get the shortest codes, while less frequent characters get longer codes.</p>
+                <p style="margin-top: 0; margin-bottom: 0.5rem;"><strong>Purpose:</strong> To significantly reduce the overall size of data (minimize the total number of bits) without losing any original information when decoding it back.</p>
+                <p style="margin-top: 0; margin-bottom: 0;"><strong>When to use:</strong> It is highly effective when certain characters appear much more frequently than others. It is commonly used as a back-end step in real-world compression formats like ZIP, GZIP, and JPEG images.</p>
+            </div>
+            <div id="huffman-text-scanner" style="background-color: #fff; padding: 1rem; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); margin-bottom: 1rem; font-size: 20px; letter-spacing: 2px; overflow-x: auto; white-space: nowrap; min-height: 2em; display: flex; align-items: center; justify-content: center; color: #aaa;">Enter text above and click Generate to begin...</div>
+            <div id="huffman-main-panel" style="display: flex; gap: 1rem;">
+                <div id="huffman-tree-container" style="flex: 2; position: relative; height: 500px; background-color: #fff; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); overflow: auto;"></div>
+                <div id="huffman-side-panel" style="flex: 1; display: flex; flex-direction: column; gap: 1rem;">
+                    <div id="huffman-table-container" style="background-color: #fff; padding: 1rem; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); flex: 1; overflow-y: auto;">
+                        <h3 style="margin-top: 0; color: #4a4a8a;">Encoding Table</h3>
+                        <table id="huffman-table" style="width: 100%; border-collapse: collapse; text-align: left;">
+                            <thead>
+                                <tr style="border-bottom: 2px solid #f4f4f9;">
+                                    <th style="padding: 0.5rem;">Char</th>
+                                    <th style="padding: 0.5rem;">Freq</th>
+                                    <th style="padding: 0.5rem;">Code</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                    <div id="huffman-output-container" style="background-color: #fff; padding: 1rem; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                        <div>
+                            <h4 style="margin-top: 0; color: #4a4a8a;">Encoded Output</h4>
+                            <div id="huffman-output-text" style="word-break: break-all; font-family: monospace; background-color: #f8f9fa; padding: 0.5rem; border-radius: 4px; border: 1px solid #ddd; min-height: 1.5em;"></div>
+                            <div style="margin-top: 0.5rem; font-size: 0.9em; color: #666;">
+                                Original Size: <span id="huffman-orig-size">0</span> bits | 
+                                Compressed Size: <span id="huffman-comp-size">0</span> bits
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div style="background-color: #fff; padding: 1.5rem; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); margin-top: 1rem; display: flex; flex-direction: column; gap: 1rem;">
+                <h3 style="margin-top: 0; margin-bottom: 0; color: #4a4a8a;">Decode Huffman String</h3>
+                <div style="display: flex; gap: 1rem; align-items: center;">
+                    <input type="text" id="huffman-decode-input" placeholder="Enter binary string..." style="flex: 1; padding: 0.5rem; border-radius: 5px; border: 1px solid #ccc; font-size: 16px;" disabled>
+                    <label for="huffman-decode-speed" style="font-weight: bold; color: #4a4a8a;">Speed:</label>
+                    <input type="range" id="huffman-decode-speed" min="1" max="100" value="50" style="width: 150px;">
+                    <span id="huffman-decode-speed-value" style="min-width: 2em;">50</span>
+                    <button id="huffman-decode-btn" style="padding: 0.5rem 1rem; border: none; border-radius: 5px; background-color: #6a6af5; color: white; cursor: pointer; font-size: 16px;" disabled>Decode</button>
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                    <label style="font-weight: bold; color: #4a4a8a;">Scanning Binary String:</label>
+                    <div id="huffman-decode-scanner" style="background-color: #f8f9fa; padding: 1rem; border-radius: 8px; border: 1px solid #ddd; font-size: 20px; letter-spacing: 2px; overflow-x: auto; white-space: nowrap; min-height: 2em; display: flex; align-items: center; color: #aaa;">Waiting for binary string...</div>
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                    <label style="font-weight: bold; color: #4a4a8a;">Decoded Output:</label>
+                    <div id="huffman-decoded-output" style="word-break: break-all; font-size: 18px; background-color: #f8f9fa; padding: 1rem; border-radius: 8px; border: 1px solid #ddd; min-height: 1.5em;"></div>
+                </div>
+            </div>
+        </div>
     </main>
     <script src="bst.js"></script>
     <script src="sorting.js"></script>
+    <script src="huffman.js"></script>
     <script src="script.js"></script>
 </body>
 </html>

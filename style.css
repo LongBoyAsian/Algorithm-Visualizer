@@ -33,6 +33,7 @@ main {
     width: 90%;
     max-width: 1200px;
     margin-top: 2rem;
+    padding-bottom: 5rem;
 }
 
 .controls {
@@ -215,6 +216,7 @@ main {
 .tree-line {
     stroke: #aaa;
     stroke-width: 2;
+    transition: x1 0.5s ease, y1 0.5s ease, x2 0.5s ease, y2 0.5s ease, stroke 0.3s;
 }
 
 .array-bar {
@@ -259,6 +261,73 @@ main {
 
 #info-panel p {
     line-height: 1.5;
+}
+
+/* --- Huffman Visualizer Styles --- */
+#huffman-tree-container svg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    pointer-events: none;
+}
+
+.huffman-node {
+    position: absolute;
+    min-width: 40px;
+    height: 40px;
+    padding: 0 5px;
+    background-color: #ff8a8a;
+    color: white;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-size: 12px;
+    font-weight: bold;
+    border: 2px solid #8a4a4a;
+    transform: translate(-50%, -50%);
+    transition: left 0.5s ease, top 0.5s ease, background-color 0.3s;
+    z-index: 10;
+}
+
+.huffman-node.merged {
+    background-color: #8a8aff;
+    border-color: #4a4a8a;
+}
+
+.huffman-node .char {
+    font-size: 14px;
+}
+.huffman-node .freq {
+    font-size: 10px;
+    opacity: 0.8;
+}
+
+#huffman-table td {
+    padding: 0.5rem;
+    border-bottom: 1px solid #eee;
+}
+
+#huffman-table tr:last-child td {
+    border-bottom: none;
+}
+
+.edge-label {
+    position: absolute;
+    background: white;
+    padding: 0 4px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: bold;
+    color: #4a4a8a;
+    transform: translate(-50%, -50%);
+    z-index: 5;
+    pointer-events: none;
+    transition: left 0.5s ease, top 0.5s ease;
 }
 
 /* --- Responsive Design --- */
