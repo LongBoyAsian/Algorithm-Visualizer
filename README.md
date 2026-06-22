@@ -12,6 +12,7 @@ Experience the visualizer immediately without downloading any code: [**\[algorit
 - **Color-Coded Steps**: Bars are color-coded to represent their state (e.g., comparing, swapping, sorted) for easier comprehension.
 - **Responsive Design**: The visualizer is designed to work on various screen sizes.
 - **Data Structure Mode**: Switch between sorting algorithms and a Binary Search Tree visualizer with insertion, deletion, and search functionality.
+- **Encoding Mode**: Visualize Huffman Encoding and Decoding algorithms. Watch the algorithm build a frequency map, construct a priority queue, merge nodes into a full Huffman Tree, and traverse the tree to encode and decode strings bit-by-bit.
 
 ## Tech Stack
 
@@ -36,4 +37,4 @@ Experience the visualizer immediately without downloading any code: [**\[algorit
 - [x] Quick Sort
 - [x] Heap Sort
 - [x] Binary Search Tree visualization (insertion, deletion, search)
-- [ ] Encoding Algorithms
+- [x] Encoding Algorithms (Huffman Encoding & Decoding)
